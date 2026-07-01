@@ -1,8 +1,5 @@
 const Feedback = require('../models/Feedback');
 
-// @desc    Get feedbacks for a specific company
-// @route   GET /api/feedback/:company
-// @access  Private
 const getCompanyFeedbacks = async (req, res, next) => {
   try {
     const company = req.params.company.toLowerCase();
@@ -21,9 +18,6 @@ const getCompanyFeedbacks = async (req, res, next) => {
   }
 };
 
-// @desc    Create new feedback / experience post
-// @route   POST /api/feedback
-// @access  Private
 const createFeedback = async (req, res, next) => {
   try {
     const { company, role, term, feedbackType, difficulty, topics, content, isAnonymous } = req.body;
@@ -45,7 +39,6 @@ const createFeedback = async (req, res, next) => {
       content
     });
 
-    // Populate user info for immediate frontend display ease
     const populatedFeedback = await Feedback.findById(feedback._id).populate('user', 'name');
 
     res.status(201).json({

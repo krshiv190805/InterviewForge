@@ -234,7 +234,7 @@ const evaluateInterview = async (req, res, next) => {
       if (lowerText.includes('star') || lowerText.includes('situation') || lowerText.includes('action') || lowerText.includes('result') || lowerText.includes('time') || lowerText.includes('project')) score += 1.0;
       
       rating = Math.min(9.5, score + (wordCount > 100 ? 1.0 : 0.5));
-      rating = Math.round(rating * 10) / 10; // round to 1 decimal
+      rating = Math.round(rating * 10) / 10; 
 
       feedback = `### 🌟 Performance Feedback Summary
 
@@ -392,7 +392,7 @@ const getStudyPlans = async (req, res, next) => {
 
 const updateStudyPlanProgress = async (req, res, next) => {
   try {
-    const { completedTasks } = req.body; // Array of completed task strings
+    const { completedTasks } = req.body; 
     const plan = await StudyPlan.findOne({ _id: req.params.id, user: req.user.id });
 
     if (!plan) {

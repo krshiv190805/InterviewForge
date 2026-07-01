@@ -38,7 +38,7 @@ export const Dashboard = () => {
       }
     };
     fetchDashboard();
-    refreshUser(); // Sync top navbar user details
+    refreshUser(); 
   }, [addToast]);
 
   if (loading) {
@@ -119,7 +119,6 @@ export const Dashboard = () => {
             <span>{metrics.attemptedCount} attempted, {metrics.todoCount} todo</span>
           </div>
         </div>
-
 
         <div className="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 glass-panel shadow-sm">
           <div className="flex items-center justify-between">

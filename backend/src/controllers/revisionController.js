@@ -28,7 +28,7 @@ const getRevisions = async (req, res, next) => {
 
 const createOrUpdateRevision = async (req, res, next) => {
   try {
-    const { problemId, quality } = req.body; // quality: 0 to 5
+    const { problemId, quality } = req.body; 
 
     if (quality === undefined || quality < 0 || quality > 5) {
       res.statusCode = 400;
@@ -75,7 +75,7 @@ const createOrUpdateRevision = async (req, res, next) => {
 
     const nextRevisionDate = new Date();
     nextRevisionDate.setDate(nextRevisionDate.getDate() + interval);
-    nextRevisionDate.setHours(0, 0, 0, 0); // start of the day
+    nextRevisionDate.setHours(0, 0, 0, 0); 
 
     if (revision) {
       revision.repetitions = repetitions;

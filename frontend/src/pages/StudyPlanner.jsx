@@ -24,13 +24,13 @@ import {
 
 export const StudyPlanner = () => {
   const [weeksLeft, setWeeksLeft] = useState(4);
-  const [motive, setMotive] = useState('placement'); // 'internship' or 'placement'
+  const [motive, setMotive] = useState('placement'); 
   const [targetCompanies, setTargetCompanies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [plans, setPlans] = useState([]);
   const [activePlan, setActivePlan] = useState(null);
   const [expandedWeek, setExpandedWeek] = useState(1);
-  const [expandedCategory, setExpandedCategory] = useState(null); // Accordion state for resource library
+  const [expandedCategory, setExpandedCategory] = useState(null); 
 
   const { addToast } = useToast();
 
@@ -181,7 +181,7 @@ export const StudyPlanner = () => {
       return { name: 'Coder Army Design', url: 'https://youtube.com/playlist?list=PLQEaRBV9gAFvzp6XhcNFpk1WdOcyVo9qT&si=sMId2AcIXbNgOTe2' };
     }
     
-    // Gate Smashers split topics routing
+    
     if (lower.includes('gate smashers') || lower.includes('operating system') || lower.includes('os')) {
       if (lower.includes('dbms') || lower.includes('database')) {
         return { name: 'Gate Smashers DBMS', url: 'https://youtube.com/playlist?list=PLxCzCOWd7aiFAN6I8CuViBuCdJgiOkT2Y&si=VB2r_DujVO-ncACH' };
@@ -296,7 +296,7 @@ export const StudyPlanner = () => {
   return (
     <div className="space-y-8 p-6 md:p-8 max-w-6xl mx-auto">
       
-      {/* Drive Announcement Alert Banner */}
+      {}
       <div className="p-4 md:p-5 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex gap-3">
           <span className="p-2 bg-amber-500/20 text-amber-600 dark:text-amber-400 rounded-xl mt-0.5 md:mt-0 flex-shrink-0">
@@ -321,7 +321,7 @@ export const StudyPlanner = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        {/* Left Column: Form & Playlists Accordion */}
+        {}
         <div className="space-y-6 lg:col-span-1">
           
           <form onSubmit={handleCreatePlan} className="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 glass-panel shadow-sm space-y-5">
@@ -330,7 +330,7 @@ export const StudyPlanner = () => {
               <span>Configure Drive Sprint</span>
             </h3>
 
-            {/* Motive Selection */}
+            {}
             <div>
               <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2.5">Drive Motive</label>
               <div className="grid grid-cols-2 gap-3">
@@ -363,7 +363,7 @@ export const StudyPlanner = () => {
               </div>
             </div>
 
-            {/* Weeks Left Slider */}
+            {}
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Time Left Before Drive</label>
@@ -386,7 +386,7 @@ export const StudyPlanner = () => {
               </div>
             </div>
 
-            {/* Target Companies */}
+            {}
             <div>
               <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Target Companies</label>
               <div className="flex flex-wrap gap-1.5">
@@ -423,7 +423,7 @@ export const StudyPlanner = () => {
             </button>
           </form>
 
-          {/* Structured Resources Accordion Library */}
+          {}
           <div className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 glass-panel shadow-sm space-y-4">
             <div>
               <h3 className="text-sm font-bold text-slate-800 dark:text-slate-350 uppercase tracking-wider flex items-center gap-2">
@@ -488,7 +488,7 @@ export const StudyPlanner = () => {
             </div>
           </div>
 
-          {/* Active study plan lists */}
+          {}
           {plans.length > 0 && (
             <div className="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 glass-panel shadow-sm space-y-4">
               <h3 className="text-xs font-bold text-slate-800 dark:text-slate-350 uppercase tracking-wider">Generated Tracks</h3>
@@ -516,7 +516,7 @@ export const StudyPlanner = () => {
 
         </div>
 
-        {/* Right Column: Roadmap Display */}
+        {}
         <div className="lg:col-span-2">
           {activePlan ? (
             <div className="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 glass-panel shadow-sm space-y-6">

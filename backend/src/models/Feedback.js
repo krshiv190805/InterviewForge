@@ -11,15 +11,15 @@ const FeedbackSchema = new mongoose.Schema({
     default: false
   },
   company: {
-    type: String, // stored in lowercase (e.g. "cisco")
+    type: String, 
     required: true
   },
   role: {
-    type: String, // e.g. "SDE Intern", "SDE 1"
+    type: String, 
     required: [true, 'Please add a target role']
   },
   term: {
-    type: String, // e.g. "Summer 2026", "Fall 2025"
+    type: String, 
     required: [true, 'Please specify the term/year']
   },
   feedbackType: {

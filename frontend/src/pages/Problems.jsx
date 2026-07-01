@@ -57,7 +57,7 @@ export const Problems = () => {
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       setDebouncedSearch(search);
-      setCurrentPage(1); // reset to page 1 on search change
+      setCurrentPage(1); 
     }, 450);
 
     return () => clearTimeout(delayDebounceFn);

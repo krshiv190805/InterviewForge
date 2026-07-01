@@ -11,7 +11,7 @@ const StudyPlanSchema = new mongoose.Schema({
     required: true
   },
   duration: {
-    type: String, // e.g., "4 Weeks"
+    type: String, 
     required: true
   },
   motive: {

@@ -13,7 +13,7 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-  origin: '*', // Allow all origins for local build ease
+  origin: '*', 
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -44,7 +44,6 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 5001;
 
-// Only listen to port if not running in Vercel
 if (require.main === module) {
   const server = app.listen(PORT, () => {
     console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);

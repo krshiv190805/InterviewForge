@@ -33,7 +33,6 @@ export const Navbar = ({ toggleSidebar }) => {
               <span>{user.streak} Days</span>
             </div>
 
-
             <span className="hidden sm:inline text-sm font-medium text-slate-700 dark:text-slate-300">
               Hi, <span className="text-blue-600 dark:text-blue-400">{user.name}</span>
             </span>

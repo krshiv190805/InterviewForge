@@ -105,7 +105,7 @@ const registerUser = async (req, res, next) => {
 
     let user;
     if (existingUser) {
-      // Recover accounts whose password was wiped by the earlier login bug
+      
       user = await User.findByIdAndUpdate(
         existingUser._id,
         {
@@ -201,8 +201,6 @@ const forgotPassword = async (req, res, next) => {
     const normalizedEmail = normalizeEmail(email);
     const user = await User.findOne({ email: normalizedEmail });
 
-    // To prevent user enumeration attacks, we return a success response even if the user is not found,
-    // but we log it on the server side so developers know.
     if (!user) {
       console.log(`[Forgot Password] Requested email not found: ${normalizedEmail}`);
       return res.json({
@@ -222,7 +220,6 @@ const forgotPassword = async (req, res, next) => {
       resetPasswordExpire: Date.now() + 10 * 60 * 1000
     });
 
-    // Try sending email (and fallback logging)
     await sendResetEmail(user.email, resetToken, req);
 
     res.json({
@@ -296,7 +293,6 @@ const googleLogin = async (req, res, next) => {
 
     let email, name;
 
-    // Check if token is a JWT (ID Token starts with eyJ)
     if (token.startsWith('eyJ')) {
       let ticket;
       try {
@@ -313,7 +309,7 @@ const googleLogin = async (req, res, next) => {
         throw new Error('Invalid Google sign-in token.');
       }
     } else {
-      // It's an access_token, verify via Google Userinfo API
+      
       const axios = require('axios');
       try {
         const response = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {

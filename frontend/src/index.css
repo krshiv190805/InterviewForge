@@ -11,7 +11,6 @@ h1, h2, h3, h4, h5, h6, .brand-font {
   font-family: 'Outfit', sans-serif;
 }
 
-/* Custom CSS Glassmorphism panel styling */
 .glass-panel {
   background: rgba(255, 255, 255, 0.45);
   backdrop-filter: blur(12px);
@@ -38,14 +37,12 @@ h1, h2, h3, h4, h5, h6, .brand-font {
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
 }
 
-/* Custom Scrollbar styled dynamically */
 :root {
   --color-scrollbar-track: light-dark(#f1f1f1, #0b0f19);
   --color-scrollbar-thumb: light-dark(#cbd5e1, #1e293b);
   scrollbar-color: var(--color-scrollbar-thumb) var(--color-scrollbar-track);
 }
 
-/* For WebKit browsers */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -64,7 +61,6 @@ h1, h2, h3, h4, h5, h6, .brand-font {
   background: light-dark(#94a3b8, #334155);
 }
 
-/* Micro-animations */
 @keyframes pulse-soft {
   0%, 100% {
     opacity: 1;

@@ -18,11 +18,11 @@ const RevisionSchema = new mongoose.Schema({
   },
   interval: {
     type: Number,
-    default: 1 // interval in days
+    default: 1 
   },
   easeFactor: {
     type: Number,
-    default: 2.5 // SM2 Ease Factor
+    default: 2.5 
   },
   repetitions: {
     type: Number,

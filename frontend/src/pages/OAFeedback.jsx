@@ -29,11 +29,9 @@ export const OAFeedback = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Filter states
   const [typeFilter, setTypeFilter] = useState('All');
   const [diffFilter, setDiffFilter] = useState('All');
 
-  // Form input states
   const [roleInput, setRoleInput] = useState('');
   const [termInput, setTermInput] = useState('');
   const [typeInput, setTypeInput] = useState('OA');
@@ -94,7 +92,7 @@ export const OAFeedback = () => {
         setFeedbacks(prev => [res.data.feedback, ...prev]);
         setIsModalOpen(false);
         
-        // Reset form inputs
+        
         setRoleInput('');
         setTermInput('');
         setTypeInput('OA');
@@ -123,7 +121,6 @@ export const OAFeedback = () => {
     return gradients[charCode % gradients.length];
   };
 
-  // Filter logic
   const filteredFeedbacks = feedbacks.filter(fb => {
     const matchType = typeFilter === 'All' || fb.feedbackType === typeFilter;
     const matchDiff = diffFilter === 'All' || fb.difficulty === diffFilter;
@@ -149,7 +146,7 @@ export const OAFeedback = () => {
         </button>
       </div>
 
-      {/* Company Picker Cards */}
+      {}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
         {companies.map(comp => (
           <button
@@ -175,11 +172,11 @@ export const OAFeedback = () => {
         ))}
       </div>
 
-      {/* Filter and Feed Bar */}
+      {}
       <div className="flex flex-wrap items-center justify-between gap-4 pt-2 border-t border-slate-200 dark:border-slate-850">
         <div className="flex flex-wrap items-center gap-4 text-xs font-bold">
           
-          {/* Type Filter */}
+          {}
           <div className="flex items-center gap-1 bg-slate-105 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-1.5 rounded-xl">
             <span className="text-slate-400 mr-1.5 flex items-center gap-1"><Filter size={12} /> Stage:</span>
             {['All', 'OA', 'Interview'].map(type => (
@@ -197,7 +194,7 @@ export const OAFeedback = () => {
             ))}
           </div>
 
-          {/* Difficulty Filter */}
+          {}
           <div className="flex items-center gap-1 bg-slate-105 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-1.5 rounded-xl">
             <span className="text-slate-400 mr-1.5 flex items-center gap-1"><Filter size={12} /> Level:</span>
             {['All', 'Easy', 'Medium', 'Hard'].map(diff => (
@@ -221,7 +218,7 @@ export const OAFeedback = () => {
         </span>
       </div>
 
-      {/* Main Experiences Feed */}
+      {}
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="h-48 bg-slate-100 dark:bg-slate-800/40 rounded-2xl animate-pulse" />
@@ -251,7 +248,7 @@ export const OAFeedback = () => {
               className="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 glass-panel shadow-sm flex flex-col justify-between"
             >
               <div className="space-y-4">
-                {/* Header info */}
+                {}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className={`h-9 w-9 rounded-full flex items-center justify-center text-white font-bold text-xs uppercase shadow-sm bg-gradient-to-tr ${
@@ -286,7 +283,7 @@ export const OAFeedback = () => {
                   </span>
                 </div>
 
-                {/* Subheader info */}
+                {}
                 <div className="flex items-center gap-3 text-xs font-semibold">
                   <span className="text-slate-900 dark:text-slate-200 font-bold bg-slate-100 dark:bg-slate-850 px-2 py-0.5 rounded-md">
                     {fb.role}
@@ -303,13 +300,13 @@ export const OAFeedback = () => {
                   </div>
                 </div>
 
-                {/* Main feedback text */}
+                {}
                 <p className="text-slate-600 dark:text-slate-350 text-xs leading-relaxed whitespace-pre-wrap">
                   {fb.content}
                 </p>
               </div>
 
-              {/* Topics tagging */}
+              {}
               {fb.topics && fb.topics.length > 0 && (
                 <div className="mt-5 pt-4 border-t border-slate-100 dark:border-slate-800/40 flex flex-wrap gap-1.5">
                   {fb.topics.map((tag, i) => (
@@ -328,7 +325,7 @@ export const OAFeedback = () => {
         </div>
       )}
 
-      {/* Share Experience Modal */}
+      {}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs">
           <div className="w-full max-w-xl p-6 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xl space-y-6 relative overflow-hidden animate-in fade-in zoom-in duration-200">
