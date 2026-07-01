@@ -291,23 +291,42 @@ const googleLogin = async (req, res, next) => {
 
     if (!token) {
       res.statusCode = 400;
-      throw new Error('Google identity token is required');
+      throw new Error('Google identity or access token is required');
     }
 
-    let ticket;
-    try {
-      ticket = await googleClient.verifyIdToken({
-        idToken: token,
-        audience: process.env.GOOGLE_CLIENT_ID
-      });
-    } catch (err) {
-      console.error('[Google OAuth] Token verification failed:', err.message);
-      res.statusCode = 400;
-      throw new Error('Invalid Google sign-in token. Make sure GOOGLE_CLIENT_ID matches.');
-    }
+    let email, name;
 
-    const payload = ticket.getPayload();
-    const { email, name } = payload;
+    // Check if token is a JWT (ID Token starts with eyJ)
+    if (token.startsWith('eyJ')) {
+      let ticket;
+      try {
+        ticket = await googleClient.verifyIdToken({
+          idToken: token,
+          audience: process.env.GOOGLE_CLIENT_ID
+        });
+        const payload = ticket.getPayload();
+        email = payload.email;
+        name = payload.name;
+      } catch (err) {
+        console.error('[Google OAuth] ID Token verification failed:', err.message);
+        res.statusCode = 400;
+        throw new Error('Invalid Google sign-in token.');
+      }
+    } else {
+      // It's an access_token, verify via Google Userinfo API
+      const axios = require('axios');
+      try {
+        const response = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        email = response.data.email;
+        name = response.data.name;
+      } catch (err) {
+        console.error('[Google OAuth] Access Token verification failed:', err.message);
+        res.statusCode = 400;
+        throw new Error('Invalid Google access token.');
+      }
+    }
 
     if (!email) {
       res.statusCode = 400;

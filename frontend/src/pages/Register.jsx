@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { User, Mail, KeyRound, Loader2, ArrowRight } from 'lucide-react';
-import { GoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin } from '@react-oauth/google';
 import { getAuthErrorMessage } from '../utils/apiError';
 
 export const Register = () => {
@@ -42,10 +42,10 @@ export const Register = () => {
     }
   };
 
-  const handleGoogleSuccess = async (credentialResponse) => {
+  const handleGoogleSuccess = async (tokenResponse) => {
     setLoading(true);
     try {
-      const res = await googleLogin(credentialResponse.credential);
+      const res = await googleLogin(tokenResponse.access_token);
       if (res.success) {
         addToast(`Welcome aboard, ${res.user.name}! Your account is forged.`, 'success');
         navigate('/');
@@ -62,6 +62,11 @@ export const Register = () => {
   const handleGoogleError = () => {
     addToast('Google Sign-in failed. Please try again.', 'error');
   };
+
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: handleGoogleSuccess,
+    onError: handleGoogleError
+  });
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-[#090D16] relative overflow-hidden">
@@ -149,13 +154,32 @@ export const Register = () => {
         </div>
 
         <div className="flex justify-center w-full">
-          <GoogleLogin
-            onSuccess={handleGoogleSuccess}
-            onError={handleGoogleError}
-            theme="filled_dark"
-            shape="pill"
-            width="340px"
-          />
+          <button
+            type="button"
+            onClick={() => handleGoogleLogin()}
+            disabled={loading}
+            className="w-full flex items-center justify-center gap-3 py-3 px-4 bg-slate-900/40 hover:bg-slate-900/80 border border-slate-800 hover:border-slate-700 text-slate-200 hover:text-white rounded-2xl text-sm font-bold shadow-lg transition-all duration-200 cursor-pointer disabled:opacity-50"
+          >
+            <svg className="w-5 h-5" viewBox="0 0 24 24">
+              <path
+                fill="#EA4335"
+                d="M5.26620003,9.7651794 C6.19875199,6.97756194 8.81484218,5 11.8901734,5 C13.7225434,5 15.3757225,5.69364162 16.6473988,6.84971098 L20.2312139,3.26589595 C18.0346821,1.24277457 15.1156069,0 11.8901734,0 C7.19075145,0 3.14450867,2.71676301 1.24277457,6.67052023 L5.26620003,9.7651794 Z"
+              />
+              <path
+                fill="#4285F4"
+                d="M23.4913295,12.2023121 C23.4913295,11.3352601 23.416185,10.5086705 23.2774566,9.71098266 L11.8901734,9.71098266 L11.8901734,14.3352601 L18.4046243,14.3352601 C18.1271676,15.8265896 17.283237,17.0867052 16.0231214,17.9306358 L20.0465434,21.0505794 C22.4046243,18.8786127 23.7687861,15.6531792 23.7687861,12.2023121 C23.7687861,12.2023121 23.4913295,12.2023121 23.4913295,12.2023121 Z"
+              />
+              <path
+                fill="#FBBC05"
+                d="M5.26620003,14.2348206 L1.24277457,17.3294798 C3.14450867,21.283237 7.19075145,24 11.8901734,24 C15.1156069,24 18.0346821,22.7572254 20.0465434,20.734104 L16.0231214,17.6141604 C14.9248555,18.3410405 13.5260116,18.8208092 11.8901734,18.8208092 C8.81484218,18.8208092 6.19875199,16.8432473 5.26620003,14.2348206 Z"
+              />
+              <path
+                fill="#34A853"
+                d="M5.26620003,9.7651794 L1.24277457,6.67052023 C1.24277457,6.67052023 1.24277457,6.67052023 1.24277457,6.67052023 C0.439306358,8.34682081 0,10.2222543 0,12.2023121 C0,14.1823699 0.439306358,16.0578035 1.24277457,17.734104 L5.26620003,14.6394448 C5.26620003,14.6394448 5.26620003,14.6394448 5.26620003,14.6394448 C4.98872832,13.8763006 4.8150289,13.0560694 4.8150289,12.2023121 C4.8150289,11.3485549 4.98872832,10.5283237 5.26620003,9.7651794 Z"
+              />
+            </svg>
+            <span>Continue with Google</span>
+          </button>
         </div>
 
         <p className="text-center text-sm text-slate-400 mt-8">
