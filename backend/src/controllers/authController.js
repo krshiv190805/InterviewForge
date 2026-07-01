@@ -2,7 +2,10 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
+const { OAuth2Client } = require('google-auth-library');
 const User = require('../models/User');
+
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const sendResetEmail = async (email, resetToken, req) => {
   const host = req.get('x-forwarded-host') || req.get('host');
@@ -282,10 +285,61 @@ const getMe = async (req, res, next) => {
   }
 };
 
+const googleLogin = async (req, res, next) => {
+  try {
+    const { token } = req.body;
+
+    if (!token) {
+      res.statusCode = 400;
+      throw new Error('Google identity token is required');
+    }
+
+    let ticket;
+    try {
+      ticket = await googleClient.verifyIdToken({
+        idToken: token,
+        audience: process.env.GOOGLE_CLIENT_ID
+      });
+    } catch (err) {
+      console.error('[Google OAuth] Token verification failed:', err.message);
+      res.statusCode = 400;
+      throw new Error('Invalid Google sign-in token. Make sure GOOGLE_CLIENT_ID matches.');
+    }
+
+    const payload = ticket.getPayload();
+    const { email, name } = payload;
+
+    if (!email) {
+      res.statusCode = 400;
+      throw new Error('Google account is missing an email address');
+    }
+
+    const normalizedEmail = normalizeEmail(email);
+
+    let user = await User.findOne({ email: normalizedEmail }).select('+password');
+
+    if (!user) {
+      user = await User.create({
+        name: name || 'Google User',
+        email: normalizedEmail,
+        password: crypto.randomBytes(32).toString('hex')
+      });
+      console.log(`[Google OAuth] Created new user: ${normalizedEmail}`);
+    } else {
+      console.log(`[Google OAuth] Logged in existing user: ${normalizedEmail}`);
+    }
+
+    res.json(buildAuthResponse(user));
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   forgotPassword,
   resetPassword,
-  getMe
+  getMe,
+  googleLogin
 };

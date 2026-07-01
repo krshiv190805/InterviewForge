@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { User, Mail, KeyRound, Loader2, ArrowRight } from 'lucide-react';
+import { GoogleLogin } from '@react-oauth/google';
 import { getAuthErrorMessage } from '../utils/apiError';
 
 export const Register = () => {
@@ -10,7 +11,7 @@ export const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const { register } = useAuth();
+  const { register, googleLogin } = useAuth();
   const { addToast } = useToast();
   const navigate = useNavigate();
 
@@ -39,6 +40,27 @@ export const Register = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    setLoading(true);
+    try {
+      const res = await googleLogin(credentialResponse.credential);
+      if (res.success) {
+        addToast(`Welcome aboard, ${res.user.name}! Your account is forged.`, 'success');
+        navigate('/');
+      }
+    } catch (err) {
+      console.error(err);
+      const message = getAuthErrorMessage(err, 'Google authentication failed.');
+      addToast(message, 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleError = () => {
+    addToast('Google Sign-in failed. Please try again.', 'error');
   };
 
   return (
@@ -116,6 +138,25 @@ export const Register = () => {
             )}
           </button>
         </form>
+
+        <div className="relative my-6">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-slate-800"></div>
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-[#090D16] px-2 text-slate-500 font-semibold tracking-wider">Or continue with</span>
+          </div>
+        </div>
+
+        <div className="flex justify-center w-full">
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={handleGoogleError}
+            theme="filled_dark"
+            shape="pill"
+            width="340px"
+          />
+        </div>
 
         <p className="text-center text-sm text-slate-400 mt-8">
           Already forged?{' '}
