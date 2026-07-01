@@ -8,8 +8,14 @@ const User = require('../models/User');
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const sendResetEmail = async (email, resetToken, req) => {
-  const host = req.get('x-forwarded-host') || req.get('host');
-  const protocol = req.headers['x-forwarded-proto'] || 'http';
+  let host = req.get('x-forwarded-host') || req.get('host') || 'interview-forge-psi.vercel.app';
+  let protocol = req.headers['x-forwarded-proto'] || 'http';
+
+  if (host.includes('vercel.app') || host === 'interview-forge-psi.vercel.app') {
+    host = 'interview-forge-psi.vercel.app';
+    protocol = 'https';
+  }
+
   const resetUrl = `${protocol}://${host}/reset-password/${resetToken}`;
 
   console.log('====================================');
