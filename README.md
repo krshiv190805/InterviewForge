@@ -1,7 +1,7 @@
 # Brief About the Project
 InterviewForge is a full-stack platform designed for software engineers to streamline their technical interview preparation. It helps candidates track coding problems, organize study schedules, write revision notes, and run AI-powered mock interviews with real-time feedback.
 The platform integrates secure JWT authentication, Google OAuth2 sign-in, and the Gemini API for intelligence and feedback generation.
-Node.js | Express | React | Vite | MongoDB | Gemini API
+![Node.js](https://img.shields.io/badge/Node.js-18%2B-green) ![Express](https://img.shields.io/badge/Express-4.x-gray) ![React](https://img.shields.io/badge/React-18.x-blue) ![Vite](https://img.shields.io/badge/Vite-5.x-purple) ![MongoDB](https://img.shields.io/badge/MongoDB-7.x-green) ![Gemini API](https://img.shields.io/badge/Gemini%20API-Active-orange)
 
 ## Features
 ### Learning & Assessment
