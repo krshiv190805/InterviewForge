@@ -8,9 +8,8 @@ import { getAuthErrorMessage } from '../utils/apiError';
 export const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
-  const [simulatedToken, setSimulatedToken] = useState('');
+  const [submitted, setSubmitted] = useState(false);
   const { addToast } = useToast();
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,10 +22,8 @@ export const ForgotPassword = () => {
     try {
       const res = await axios.post('/api/auth/forgotpassword', { email });
       if (res.data.success) {
-        addToast('Password reset token generated!', 'success');
-        if (res.data.resetToken) {
-          setSimulatedToken(res.data.resetToken);
-        }
+        addToast(res.data.message || 'Password reset link sent!', 'success');
+        setSubmitted(true);
       }
     } catch (err) {
       console.error(err);
@@ -51,11 +48,11 @@ export const ForgotPassword = () => {
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold tracking-tight text-white">Reset Password</h2>
           <p className="text-sm text-slate-400 mt-2">
-            No email is sent in local dev. Enter your account email and we will show a reset code on this page.
+            Enter your account email to receive a password reset link.
           </p>
         </div>
 
-        {!simulatedToken ? (
+        {!submitted ? (
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Email Address</label>
@@ -80,27 +77,31 @@ export const ForgotPassword = () => {
               {loading ? (
                 <Loader2 className="animate-spin" size={18} />
               ) : (
-                <span>Request Reset Code</span>
+                <span>Send Reset Link</span>
               )}
             </button>
           </form>
         ) : (
           <div className="space-y-6">
-            <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm leading-relaxed">
-              <p className="font-bold mb-1">Reset code ready</p>
-              This app does not send real emails yet. Copy the code below, then continue to set a new password.
-              <div className="mt-3 p-3 font-mono bg-slate-950 rounded-xl text-center select-all border border-slate-800 text-xs break-all text-white">
-                {simulatedToken}
+            <div className="p-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm leading-relaxed text-center">
+              <div className="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center mx-auto mb-4">
+                <Mail className="text-emerald-400" size={24} />
+              </div>
+              <p className="font-bold text-base mb-2">Check your email</p>
+              If an account is registered with <strong>{email}</strong>, you will receive an email shortly containing a link to reset your password.
+              
+              <div className="mt-4 pt-4 border-t border-slate-800 text-xs text-slate-500 leading-normal text-left">
+                <strong>Local Development Note:</strong><br />
+                Real emails are not sent unless SMTP is configured. You can find the reset URL in the **backend terminal console** logs.
               </div>
             </div>
 
-            <button
-              onClick={() => navigate(`/reset-password/${simulatedToken}`)}
-              className="w-full flex items-center justify-center gap-2 py-3.5 px-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-2xl text-sm font-bold shadow-lg shadow-emerald-600/10 btn-transition"
+            <Link
+              to="/login"
+              className="w-full flex items-center justify-center gap-2 py-3.5 px-4 bg-slate-900 border border-slate-800 text-white rounded-2xl text-sm font-bold hover:bg-slate-800 transition-all duration-200 text-center"
             >
-              <KeyRound size={16} />
-              <span>Go to Password Reset Page</span>
-            </button>
+              <span>Return to Login</span>
+            </Link>
           </div>
         )}
       </div>

@@ -1,7 +1,54 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
+const nodemailer = require('nodemailer');
 const User = require('../models/User');
+
+const sendResetEmail = async (email, resetToken, req) => {
+  const host = req.get('x-forwarded-host') || req.get('host');
+  const protocol = req.headers['x-forwarded-proto'] || 'http';
+  const resetUrl = `${protocol}://${host}/reset-password/${resetToken}`;
+
+  console.log('====================================');
+  console.log(`PASSWORD RESET URL (Local Testing): ${resetUrl}`);
+  console.log('====================================');
+
+  if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
+    console.log('SMTP settings are not configured. Email not sent.');
+    return;
+  }
+
+  const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: parseInt(process.env.SMTP_PORT || '587'),
+    secure: process.env.SMTP_SECURE === 'true',
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS
+    }
+  });
+
+  const mailOptions = {
+    from: process.env.EMAIL_FROM || '"InterviewForge" <noreply@interviewforge.com>',
+    to: email,
+    subject: 'InterviewForge - Password Reset Request',
+    text: `You are receiving this email because you (or someone else) have requested the reset of a password. Please click on the following link, or paste this into your browser to complete the process:\n\n${resetUrl}\n\nIf you did not request this, please ignore this email and your password will remain unchanged.\n`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 10px;">
+        <h2 style="color: #4f46e5; text-align: center;">InterviewForge Password Reset</h2>
+        <p>You requested a password reset for your InterviewForge account. Please click the button below to set a new password:</p>
+        <div style="text-align: center; margin: 30px 0;">
+          <a href="${resetUrl}" style="background-color: #4f46e5; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">Reset Password</a>
+        </div>
+        <p>This link will expire in 10 minutes.</p>
+        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
+        <p style="font-size: 12px; color: #64748b;">If you did not request this, please ignore this email and your password will remain unchanged.</p>
+      </div>
+    `
+  };
+
+  await transporter.sendMail(mailOptions);
+};
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET || 'interviewforge_secret_key_123', {
@@ -151,9 +198,14 @@ const forgotPassword = async (req, res, next) => {
     const normalizedEmail = normalizeEmail(email);
     const user = await User.findOne({ email: normalizedEmail });
 
+    // To prevent user enumeration attacks, we return a success response even if the user is not found,
+    // but we log it on the server side so developers know.
     if (!user) {
-      res.statusCode = 404;
-      throw new Error('No account found with that email');
+      console.log(`[Forgot Password] Requested email not found: ${normalizedEmail}`);
+      return res.json({
+        success: true,
+        message: 'If an account with that email exists, a password reset link has been sent.'
+      });
     }
 
     const resetToken = crypto.randomBytes(20).toString('hex');
@@ -167,10 +219,12 @@ const forgotPassword = async (req, res, next) => {
       resetPasswordExpire: Date.now() + 10 * 60 * 1000
     });
 
+    // Try sending email (and fallback logging)
+    await sendResetEmail(user.email, resetToken, req);
+
     res.json({
       success: true,
-      message: 'Password reset token generated.',
-      resetToken
+      message: 'If an account with that email exists, a password reset link has been sent.'
     });
   } catch (error) {
     next(error);
