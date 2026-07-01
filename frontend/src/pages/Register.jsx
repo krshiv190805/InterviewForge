@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { User, Mail, KeyRound, Loader2, ArrowRight } from 'lucide-react';
+import { getAuthErrorMessage } from '../utils/apiError';
 
 export const Register = () => {
   const [name, setName] = useState('');
@@ -33,7 +34,7 @@ export const Register = () => {
       }
     } catch (err) {
       console.error(err);
-      const message = err.response?.data?.message || 'Registration failed. Email might be in use.';
+      const message = getAuthErrorMessage(err, 'Registration failed. Please try again.');
       addToast(message, 'error');
     } finally {
       setLoading(false);

@@ -44,11 +44,16 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 5001;
 
-const server = app.listen(PORT, () => {
-  console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
-});
+// Only listen to port if not running in Vercel
+if (require.main === module) {
+  const server = app.listen(PORT, () => {
+    console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
+  });
 
-process.on('unhandledRejection', (err, promise) => {
-  console.log(`Unhandled Rejection Error: ${err.message}`);
-  server.close(() => process.exit(1));
-});
+  process.on('unhandledRejection', (err, promise) => {
+    console.log(`Unhandled Rejection Error: ${err.message}`);
+    server.close(() => process.exit(1));
+  });
+}
+
+module.exports = app;

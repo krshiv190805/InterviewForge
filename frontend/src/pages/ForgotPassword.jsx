@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useToast } from '../context/ToastContext';
 import { Mail, ArrowLeft, Loader2, KeyRound } from 'lucide-react';
+import { getAuthErrorMessage } from '../utils/apiError';
 
 export const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -29,7 +30,7 @@ export const ForgotPassword = () => {
       }
     } catch (err) {
       console.error(err);
-      addToast(err.response?.data?.message || 'Failed to request reset.', 'error');
+      addToast(err.response?.data?.message || getAuthErrorMessage(err, 'Failed to request reset.'), 'error');
     } finally {
       setLoading(false);
     }
@@ -49,7 +50,9 @@ export const ForgotPassword = () => {
 
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold tracking-tight text-white">Reset Password</h2>
-          <p className="text-sm text-slate-400 mt-2">Enter your email to request a simulated reset token</p>
+          <p className="text-sm text-slate-400 mt-2">
+            No email is sent in local dev. Enter your account email and we will show a reset code on this page.
+          </p>
         </div>
 
         {!simulatedToken ? (
@@ -84,8 +87,8 @@ export const ForgotPassword = () => {
         ) : (
           <div className="space-y-6">
             <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm leading-relaxed">
-              <p className="font-bold mb-1">📬 Local Simulation Successful!</p>
-              An email containing your password reset link was simulated. Here is the reset token:
+              <p className="font-bold mb-1">Reset code ready</p>
+              This app does not send real emails yet. Copy the code below, then continue to set a new password.
               <div className="mt-3 p-3 font-mono bg-slate-950 rounded-xl text-center select-all border border-slate-800 text-xs break-all text-white">
                 {simulatedToken}
               </div>

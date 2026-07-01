@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { KeyRound, Mail, ArrowRight, Loader2 } from 'lucide-react';
+import { getAuthErrorMessage } from '../utils/apiError';
 
 export const Login = () => {
   const [email, setEmail] = useState('');
@@ -28,7 +29,7 @@ export const Login = () => {
       }
     } catch (err) {
       console.error(err);
-      const message = err.response?.data?.message || 'Login failed. Please verify credentials.';
+      const message = getAuthErrorMessage(err, 'Login failed. Please verify credentials.');
       addToast(message, 'error');
     } finally {
       setLoading(false);
